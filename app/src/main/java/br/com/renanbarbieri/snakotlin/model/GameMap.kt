@@ -18,8 +18,8 @@ class GameMap(width: Int, height: Int) {
     private var blocksX: Int = 0
     private var blocksY: Int = 0
 
-    private var snakeX: IntArray
-    private var snakeY: IntArray
+    private var snakeX: IntArray = IntArray(numOfBlocksWidth)
+    private var snakeY: IntArray = IntArray(numOfBlocksHeight)
 
     private var foodX: Int = 0
     private var foodY: Int = 0
@@ -33,8 +33,8 @@ class GameMap(width: Int, height: Int) {
         this.blocksY = height/numOfBlocksHeight
 
         // init snake on center
-        snakeX = intArrayOf(numOfBlocksWidth/2)
-        snakeY = intArrayOf(numOfBlocksHeight/2)
+        snakeX[0] = numOfBlocksWidth/2
+        snakeY[0] = numOfBlocksHeight/2
 
         generateFoodPosition()
     }
@@ -106,5 +106,13 @@ class GameMap(width: Int, height: Int) {
         }
         return canvasArray
     }
+
+    fun getFood() = CanvasSquare(
+            left = (foodX * blocksX).toFloat(),
+            right = ((foodX * blocksX) + blocksX).toFloat(),
+            bottom = (foodY * blocksY).toFloat(),
+            top = ((foodY * blocksY) + blocksY).toFloat()
+
+    )
 
 }

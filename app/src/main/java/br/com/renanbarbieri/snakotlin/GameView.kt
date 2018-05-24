@@ -194,6 +194,9 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
                 // Clear the screen with my favorite color
                 it.drawColor(Color.argb(255, 120, 197, 87))
                 map?.getSnakeBody()?.forEach { canvas?.drawRect(it.left, it.top, it.right, it.bottom, paint) }
+                map?.getFood()?.let {
+                    canvas?.drawRect(it.left, it.top, it.right, it.bottom, paint)
+                }
             }
 
             holder.unlockCanvasAndPost(canvas)
