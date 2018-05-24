@@ -6,4 +6,8 @@ class GameContext {
 
     var isRunning: Boolean = false
 
+    fun updateScore(addValue: Int) {
+        score += addValue
+    }
+
 }
