@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
+import android.support.v4.content.ContextCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceView
@@ -14,7 +15,8 @@ import br.com.renanbarbieri.snakotlin.model.GameMap
 class GameView(context: Context): SurfaceView(context), Runnable, GestureDetectorListener.GestureDirectionListener {
 
     private var canvas: Canvas? = null
-    private val paint: Paint = Paint()
+    private val paintSnake: Paint = Paint()
+    private val paintFood: Paint = Paint()
 
     private var gameThread: Thread? = null
 
@@ -189,14 +191,13 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
     private fun drawFrame() {
         if(holder.surface.isValid) {
             canvas = holder.lockCanvas()
-            paint.color = Color.argb(255, 255, 255, 255)
+            paintSnake.color = ContextCompat.getColor(context, R.color.snake)
+            paintFood.color = ContextCompat.getColor(context, R.color.food)
             canvas?.let {
-                // Clear the screen with my favorite color
-                it.drawColor(Color.argb(255, 120, 197, 87))
-                map?.getSnakeBody()?.forEach { canvas?.drawRect(it.left, it.top, it.right, it.bottom, paint) }
-                map?.getFood()?.let {
-                    canvas?.drawRect(it.left, it.top, it.right, it.bottom, paint)
-                }
+                //color background
+                it.drawColor(ContextCompat.getColor(context, R.color.gameBackground))
+                map?.getSnakeBody()?.forEach { canvas?.drawCircle(it.centerX, it.centerY, it.radius, paintSnake) }
+                map?.getFood()?.let { canvas?.drawCircle(it.centerX, it.centerY, it.radius,paintFood) }
             }
 
             holder.unlockCanvasAndPost(canvas)

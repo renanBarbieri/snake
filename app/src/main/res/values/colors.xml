@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="gameBackground">#f4f4f8</color>
+    <color name="snake">#fe4a49</color>
+    <color name="food">#fed766</color>
+    <color name="pallete1">#2ab7ca</color>
+    <color name="pallete2">#e6e6ea</color>
 </resources>

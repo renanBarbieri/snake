@@ -94,25 +94,37 @@ class GameMap(width: Int, height: Int) {
         }
     }
 
-    fun getSnakeBody(): ArrayList<CanvasSquare> {
-        val canvasArray: ArrayList<CanvasSquare> = arrayListOf()
+    fun getSnakeBody(): ArrayList<CanvasCircle> {
+        val canvasArray: ArrayList<CanvasCircle> = arrayListOf()
         for(i in 0 until snake.length) {
-            canvasArray.add(CanvasSquare(
-                    left = (snakeX[i] * blocksX).toFloat(),
-                    right = ((snakeX[i] * blocksX) + blocksX).toFloat(),
-                    top = (snakeY[i] * blocksY).toFloat(),
-                    bottom = ((snakeY[i] * blocksY) + blocksY).toFloat()
+            val startXRect: Float = (snakeX[i] * blocksX).toFloat()
+            val endXRect: Float = ((snakeX[i] * blocksX) + blocksX).toFloat()
+
+            val startYRect: Float = (snakeY[i] * blocksY).toFloat()
+            val endYRect: Float = ((snakeY[i] * blocksY) + blocksY).toFloat()
+            canvasArray.add(CanvasCircle(
+                    centerX = (startXRect + endXRect)/2,
+                    centerY = (startYRect + endYRect)/2,
+                    radius = (blocksX/2).toFloat()
             ))
         }
         return canvasArray
     }
 
-    fun getFood() = CanvasSquare(
-            left = (foodX * blocksX).toFloat(),
-            right = ((foodX * blocksX) + blocksX).toFloat(),
-            bottom = (foodY * blocksY).toFloat(),
-            top = ((foodY * blocksY) + blocksY).toFloat()
+    fun getFood(): CanvasCircle {
 
-    )
+        val startXRect: Float = (foodX * blocksX).toFloat()
+        val endXRect: Float = ((foodX * blocksX) + blocksX).toFloat()
+
+        val startYRect: Float = (foodY * blocksY).toFloat()
+        val endYRect: Float = ((foodY * blocksY) + blocksY).toFloat()
+
+        return CanvasCircle(
+                centerX = (startXRect + endXRect)/2,
+                centerY = (startYRect + endYRect)/2,
+                radius = (blocksX/2).toFloat()
+
+        )
+    }
 
 }
