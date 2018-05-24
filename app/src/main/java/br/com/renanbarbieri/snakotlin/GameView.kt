@@ -1,6 +1,9 @@
 package br.com.renanbarbieri.snakotlin
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Point
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -9,6 +12,11 @@ import br.com.renanbarbieri.snakotlin.model.GameContext
 import br.com.renanbarbieri.snakotlin.model.GameMap
 
 class GameView(context: Context): SurfaceView(context), Runnable, GestureDetectorListener.GestureDirectionListener {
+
+    private var canvas: Canvas? = null
+    private val paint: Paint = Paint()
+
+    private var gameThread: Thread? = null
 
     private val millisInSecond: Long = 1000
     private var nowTime: Long = System.currentTimeMillis()
@@ -21,7 +29,7 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
     // Time for verify update
     private var nextUpdateTime: Long = nowTime
 
-    private val fps: Long = 10
+    private val fps: Long = 3
     private var screenDimen: Point? = null
 
     private var gestureDetector: GestureDetector? = null
@@ -38,7 +46,7 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
     }
 
     /**
-     * Habilita o início do jogo
+     * Starts the game
      */
     fun startGame() {
         gameContext.isRunning = true
@@ -49,16 +57,25 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
         while(gameContext.isRunning){
             if(updateFrame()){
                 updateGameContext()
+                drawFrame()
             }
         }
     }
 
     fun pause() {
-        gameContext.isRunning = false
+        try {
+            gameContext.isRunning = false
+            gameThread?.join()
+        } catch (erro: InterruptedException){
+
+        }
+
     }
 
     fun resume() {
         gameContext.isRunning = true
+        gameThread = Thread(this)
+        gameThread?.start()
     }
 
     fun finish() {
@@ -66,19 +83,22 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
     }
 
     /**
-     * Verifica se é necessário realizar o update do frame do jogo
-     * @return boolean : true caso seja necessário realizar o update
+     * Verifies if its necessery update frame
+     * @return boolean : true if its necessary
      */
     private fun updateFrame(): Boolean {
         var needUpdate = false
-        if(nextUpdateTime < nowTime){
-            nextUpdateTime = nowTime + (millisInSecond/fps)
+        if(nextUpdateTime <= System.currentTimeMillis()){
+            nextUpdateTime = System.currentTimeMillis() + (millisInSecond/fps)
             needUpdate = true
         }
 
         return needUpdate
     }
 
+    /**
+     * Update all elements at screen
+     */
     private fun updateGameContext() {
         this.map?.let {
             if(it.snakeAteFood()){
@@ -87,15 +107,14 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
                 it.feedSnake()
 
             }
-            moveSnake()
+            it.updateSnakePosition(currentDirection)
         }
 
     }
 
-    private fun moveSnake() {
-
-    }
-
+    /**
+     * Verifies user touch event
+     */
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         event?.let {
             gestureDetector?.onTouchEvent(it)
@@ -103,6 +122,9 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
         return true
     }
 
+    /**
+     * implements GestureDetectorListener.GestureDirectionListener
+     */
     override fun onSwipeLeft() {
         when(currentDirection) {
             Direction.UP,
@@ -116,6 +138,9 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
         }
     }
 
+    /**
+     * implements GestureDetectorListener.GestureDirectionListener
+     */
     override fun onSwipeRight() {
         when(currentDirection) {
             Direction.UP,
@@ -129,6 +154,9 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
         }
     }
 
+    /**
+     * implements GestureDetectorListener.GestureDirectionListener
+     */
     override fun onSwipeUp() {
         when(currentDirection) {
             Direction.UP,
@@ -142,6 +170,9 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
         }
     }
 
+    /**
+     * implements GestureDetectorListener.GestureDirectionListener
+     */
     override fun onSwipeDown() {
         when(currentDirection) {
             Direction.UP,
@@ -152,6 +183,20 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
             Direction.RIGHT -> {
                 currentDirection = Direction.DOWN
             }
+        }
+    }
+
+    private fun drawFrame() {
+        if(holder.surface.isValid) {
+            canvas = holder.lockCanvas()
+            paint.color = Color.argb(255, 255, 255, 255)
+            canvas?.let {
+                // Clear the screen with my favorite color
+                it.drawColor(Color.argb(255, 120, 197, 87))
+                map?.getSnakeBody()?.forEach { canvas?.drawRect(it.left, it.top, it.right, it.bottom, paint) }
+            }
+
+            holder.unlockCanvasAndPost(canvas)
         }
     }
 }

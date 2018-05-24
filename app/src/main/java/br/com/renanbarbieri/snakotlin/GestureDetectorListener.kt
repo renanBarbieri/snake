@@ -23,7 +23,6 @@ class GestureDetectorListener(): GestureDetector.SimpleOnGestureListener() {
             }
 
             this.minSwipe?.let {
-                // right to left swipe
                 if(startEvent.x - currentEvent.x > it) {
                     gestureDirectionListener?.onSwipeLeft()
                 }
@@ -31,10 +30,10 @@ class GestureDetectorListener(): GestureDetector.SimpleOnGestureListener() {
                     gestureDirectionListener?.onSwipeRight()
                 }
                 if(startEvent.y - currentEvent.y > it) {
-                    gestureDirectionListener?.onSwipeUp()
+                    gestureDirectionListener?.onSwipeDown()
                 }
                 if (currentEvent.y - startEvent.y > it) {
-                    gestureDirectionListener?.onSwipeDown()
+                    gestureDirectionListener?.onSwipeUp()
                 }
             }
         }
@@ -47,9 +46,21 @@ class GestureDetectorListener(): GestureDetector.SimpleOnGestureListener() {
     }
 
     interface GestureDirectionListener {
+        /**
+         * Called when user swipe to left
+         */
         fun onSwipeLeft()
+        /**
+         * Called when user swipe to right
+         */
         fun onSwipeRight()
+        /**
+         * Called when user swipe to top
+         */
         fun onSwipeUp()
+        /**
+         * Called when user swipe to bottom
+         */
         fun onSwipeDown()
     }
 }

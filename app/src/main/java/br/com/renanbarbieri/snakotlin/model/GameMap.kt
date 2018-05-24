@@ -1,7 +1,7 @@
 package br.com.renanbarbieri.snakotlin.model
 
+import br.com.renanbarbieri.snakotlin.Direction
 import br.com.renanbarbieri.snakotlin.random
-import java.util.*
 
 /**
  * This class is responsible to describe the game map attributes
@@ -40,7 +40,7 @@ class GameMap(width: Int, height: Int) {
     }
 
     /**
-     * Gera uma nova posição para a comida
+     * Generate a new position for food
      */
     private fun generateFoodPosition() {
         val newXPosition: Int = random(from = 0, to = numOfBlocksWidth)
@@ -51,18 +51,18 @@ class GameMap(width: Int, height: Int) {
     }
 
     /**
-     * Verifica se a cobra está na posição x e y
-     * @param x posição x
-     * @param y posição y
-     * @return boolean : true caso tenha cobra na posição
+     * Verifies if has snake at position (x,y)
+     * @param x position x
+     * @param y position y
+     * @return boolean : true if has some part of snake at position
      */
     private fun hasSnakeAtPosition(x: Int, y: Int): Boolean = snakeX.contains(x) && snakeY.contains(y)
 
     /**
-     * Verifica se a cobra está em cima da comida
-     * @return boolean : true caso a cobra esteja em cima da comida
+     * Verifies is the snake is above food position
+     * @return boolean : true if the snake is above food position
      */
-    fun snakeAteFood(): Boolean = (hasSnakeAtPosition(x= foodX, y= foodY))
+    fun snakeAteFood(): Boolean = (hasSnakeAtPosition(x = foodX, y = foodY))
 
     /**
      *
@@ -73,5 +73,38 @@ class GameMap(width: Int, height: Int) {
     }
 
     fun getFoodValue() = food.point
+
+    fun updateSnakePosition(direction: Direction){
+        // update the snake body
+        if(snake.length > 1) {
+            for (i in (snake.length-1) downTo 1) {
+                //update position from end to start
+                snakeX[i] = snakeX[i - 1]
+                snakeY[i] = snakeY[i - 1]
+
+            }
+        }
+
+        // update the snake head position
+        when(direction) {
+            Direction.LEFT -> snakeX[0]--
+            Direction.RIGHT -> snakeX[0]++
+            Direction.UP -> snakeY[0]++
+            Direction.DOWN -> snakeY[0]--
+        }
+    }
+
+    fun getSnakeBody(): ArrayList<CanvasSquare> {
+        val canvasArray: ArrayList<CanvasSquare> = arrayListOf()
+        for(i in 0 until snake.length) {
+            canvasArray.add(CanvasSquare(
+                    left = (snakeX[i] * blocksX).toFloat(),
+                    right = ((snakeX[i] * blocksX) + blocksX).toFloat(),
+                    top = (snakeY[i] * blocksY).toFloat(),
+                    bottom = ((snakeY[i] * blocksY) + blocksY).toFloat()
+            ))
+        }
+        return canvasArray
+    }
 
 }
