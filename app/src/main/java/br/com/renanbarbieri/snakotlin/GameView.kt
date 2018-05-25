@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Point
+import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -14,8 +15,7 @@ import br.com.renanbarbieri.snakotlin.model.GameMap
 class GameView(context: Context): SurfaceView(context), Runnable, GestureDetectorListener.GestureDirectionListener {
 
     private var canvas: Canvas? = null
-    private val paintSnake: Paint = Paint()
-    private val paintFood: Paint = Paint()
+    private val paint: Paint = Paint()
 
     private var gameThread: Thread? = null
 
@@ -49,10 +49,10 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
     /**
      * Restarts the game
      */
-    fun restartGame() {
+    private fun restartGame() {
         map?.clear()
         currentDirection = Direction.UP
-//        gameContext.isRunning = true
+        gameContext.score = 0
         resume()
     }
 
@@ -200,13 +200,21 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
     private fun drawFrame() {
         if(holder.surface.isValid) {
             canvas = holder.lockCanvas()
-            paintSnake.color = ContextCompat.getColor(context, R.color.snake)
-            paintFood.color = ContextCompat.getColor(context, R.color.food)
+
             canvas?.let {
                 //color background
                 it.drawColor(ContextCompat.getColor(context, R.color.gameBackground))
-                map?.getFood()?.let { canvas?.drawCircle(it.centerX, it.centerY, it.radius,paintFood) }
-                map?.getSnakeBody()?.forEach { canvas?.drawCircle(it.centerX, it.centerY, it.radius, paintSnake) }
+
+                paint.color = ContextCompat.getColor(context, R.color.food)
+                map?.getFood()?.let { canvas?.drawCircle(it.centerX, it.centerY, it.radius, paint) }
+
+                paint.color = ContextCompat.getColor(context, R.color.snake)
+                map?.getSnakeBody()?.forEach { canvas?.drawCircle(it.centerX, it.centerY, it.radius, paint) }
+
+                paint.color = ContextCompat.getColor(context, R.color.score)
+                paint.textSize = 80f
+                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                canvas?.drawText(this.gameContext.score.toString(), 45.0f, 90.0f, paint)
 
             }
 

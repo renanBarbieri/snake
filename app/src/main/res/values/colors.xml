@@ -7,6 +7,6 @@
     <color name="gameBackground">#f4f4f8</color>
     <color name="snake">#fe4a49</color>
     <color name="food">#fed766</color>
+    <color name="score">#A9d8d8de</color>
     <color name="pallete1">#2ab7ca</color>
-    <color name="pallete2">#e6e6ea</color>
 </resources>
