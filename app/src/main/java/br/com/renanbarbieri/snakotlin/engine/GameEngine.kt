@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceView
+import br.com.renanbarbieri.snakotlin.GameLifecycle
 import br.com.renanbarbieri.snakotlin.engine.model.Direction
 import br.com.renanbarbieri.snakotlin.R
 import br.com.renanbarbieri.snakotlin.engine.model.GameContext
@@ -36,12 +37,25 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
 
     private var currentDirection: Direction = Direction.UP
 
+    var gameLifecycle: GameLifecycle? = null
+
     constructor(context: Context, screenDimen: Point,
                 drawerInteractor: GameScreenDrawerInteractor.Input?,
                 gameGestureInteractor: GameGestureDirectionInteractor.Input?): this(context) {
         this.map = GameMap(width = screenDimen.x, height = screenDimen.y)
         this.screenDimen = screenDimen
 
+        this.initInteractors(drawerInteractor, gameGestureInteractor)
+    }
+
+
+    constructor(context: Context, screenDimen: Point,
+                drawerInteractor: GameScreenDrawerInteractor.Input?,
+                gameGestureInteractor: GameGestureDirectionInteractor.Input?,
+                gameLifecycle: GameLifecycle): this(context) {
+        this.map = GameMap(width = screenDimen.x, height = screenDimen.y)
+        this.screenDimen = screenDimen
+        this.gameLifecycle = gameLifecycle
         this.initInteractors(drawerInteractor, gameGestureInteractor)
     }
 
@@ -57,15 +71,15 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
      * Restarts the game
      */
     private fun restartGame() {
-        map?.clear()
-        currentDirection = Direction.UP
-        gameContext.score = 0
+        this.map?.clear()
+        this.currentDirection = Direction.UP
+        this.gameContext.score = 0
         resume()
     }
 
     override fun run() {
         //Execute game
-        while(gameContext.isRunning){
+        while(this.gameContext.isRunning){
             if(updateFrame()){
                 updateGameContext()
                 drawFrame()
@@ -75,22 +89,23 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
 
     fun pause() {
         try {
-            gameContext.isRunning = false
-            gameThread?.join()
-        } catch (erro: InterruptedException){
-
+            this.gameContext.isRunning = false
+            this.gameThread?.join()
+        } catch (error: InterruptedException){
+            gameLifecycle?.onError(errorMessage = context.getString(R.string.errorWhenPausing))
         }
 
     }
 
     fun resume() {
-        gameContext.isRunning = true
-        gameThread = Thread(this)
-        gameThread?.start()
+        this.gameContext.isRunning = true
+        this.gameThread = Thread(this)
+        this.gameThread?.start()
     }
 
     fun finish() {
-        gameContext.isRunning = false
+        this.gameContext.isRunning = false
+        this.gameLifecycle?.onSnakeDead(this.gameContext.score)
     }
 
     /**
@@ -116,7 +131,6 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
                 //snake should eat food
                 this.gameContext.updateScore(addValue = it.getFoodValue())
                 it.feedSnake()
-
             }
             it.updateSnakePosition(currentDirection)
 
@@ -134,7 +148,7 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
         event?.let {
             if(this.gameContext.isRunning)
                 this.gestureDetector?.let {
-                    gameGestureInteractor?.detectMovement(
+                    this.gameGestureInteractor?.detectMovement(
                             event = event,
                             interactorOutput = this,
                             detector = this.gestureDetector!!)
@@ -150,10 +164,10 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
      * implements GestureDetectorFramework.GestureDirectionListener.Output
      */
     override fun onSwipeLeft() {
-        when(currentDirection) {
+        when(this.currentDirection) {
             Direction.UP,
             Direction.DOWN -> {
-                currentDirection = Direction.LEFT
+                this.currentDirection = Direction.LEFT
             }
             Direction.LEFT,
             Direction.RIGHT -> {
@@ -166,10 +180,10 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
      * implements GestureDetectorFramework.GestureDirectionListener.Output
      */
     override fun onSwipeRight() {
-        when(currentDirection) {
+        when(this.currentDirection) {
             Direction.UP,
             Direction.DOWN -> {
-                currentDirection = Direction.RIGHT
+                this.currentDirection = Direction.RIGHT
             }
             Direction.LEFT,
             Direction.RIGHT -> {
@@ -182,14 +196,14 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
      * implements GestureDetectorFramework.GestureDirectionListener.Output
      */
     override fun onSwipeUp() {
-        when(currentDirection) {
+        when(this.currentDirection) {
             Direction.UP,
             Direction.DOWN -> {
                 //do nothing
             }
             Direction.LEFT,
             Direction.RIGHT -> {
-                currentDirection = Direction.UP
+                this.currentDirection = Direction.UP
             }
         }
     }
@@ -205,23 +219,23 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
             }
             Direction.LEFT,
             Direction.RIGHT -> {
-                currentDirection = Direction.DOWN
+                this.currentDirection = Direction.DOWN
             }
         }
     }
 
     private fun drawFrame() {
-        if(holder.surface.isValid) {
-            map?.let {
-                drawerInteractor?.drawFrame(
-                        backgroundColor = ContextCompat.getColor(context, R.color.gameBackground),
-                        foodColor = ContextCompat.getColor(context, R.color.food),
+        if(this.holder.surface.isValid) {
+            this.map?.let {
+                this.drawerInteractor?.drawFrame(
+                        backgroundColor = ContextCompat.getColor(this.context, R.color.gameBackground),
+                        foodColor = ContextCompat.getColor(this.context, R.color.food),
                         food = it.getFood(),
-                        snakeColor = ContextCompat.getColor(context, R.color.snake),
+                        snakeColor = ContextCompat.getColor(this.context, R.color.snake),
                         snakeBody = it.getSnakeBody(),
-                        scoreColor = ContextCompat.getColor(context, R.color.score),
+                        scoreColor = ContextCompat.getColor(this.context, R.color.score),
                         score = this.gameContext.score,
-                        holder = holder
+                        holder = this.holder
                 )
             }
         }
