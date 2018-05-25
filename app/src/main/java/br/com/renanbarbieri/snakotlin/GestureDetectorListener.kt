@@ -30,10 +30,10 @@ class GestureDetectorListener(): GestureDetector.SimpleOnGestureListener() {
                     gestureDirectionListener?.onSwipeRight()
                 }
                 if(startEvent.y - currentEvent.y > it) {
-                    gestureDirectionListener?.onSwipeDown()
+                    gestureDirectionListener?.onSwipeUp()
                 }
                 if (currentEvent.y - startEvent.y > it) {
-                    gestureDirectionListener?.onSwipeUp()
+                    gestureDirectionListener?.onSwipeDown()
                 }
             }
         }

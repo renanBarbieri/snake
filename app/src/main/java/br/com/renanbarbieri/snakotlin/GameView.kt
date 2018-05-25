@@ -2,7 +2,6 @@ package br.com.renanbarbieri.snakotlin
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
 import android.support.v4.content.ContextCompat
@@ -31,7 +30,7 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
     // Time for verify update
     private var nextUpdateTime: Long = nowTime
 
-    private val fps: Long = 3
+    private val fps: Long = 6
     private var screenDimen: Point? = null
 
     private var gestureDetector: GestureDetector? = null
@@ -42,16 +41,19 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
         this.map = GameMap(width = screenDimen.x, height = screenDimen.y)
         this.screenDimen = screenDimen
 
-        val minSwipe = screenDimen.x/3
+        val minSwipe = screenDimen.x/4
 
         gestureDetector = GestureDetector(context, GestureDetectorListener(minSwipe = minSwipe, maxSwipe = null, directionListener = this))
     }
 
     /**
-     * Starts the game
+     * Restarts the game
      */
-    fun startGame() {
-        gameContext.isRunning = true
+    fun restartGame() {
+        map?.clear()
+        currentDirection = Direction.UP
+//        gameContext.isRunning = true
+        resume()
     }
 
     override fun run() {
@@ -110,6 +112,10 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
 
             }
             it.updateSnakePosition(currentDirection)
+
+            if(it.hasCollision()) {
+                finish()
+            }
         }
 
     }
@@ -119,7 +125,10 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
      */
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         event?.let {
-            gestureDetector?.onTouchEvent(it)
+            if(this.gameContext.isRunning)
+                gestureDetector?.onTouchEvent(it)
+            else
+                restartGame()
         }
         return true
     }
@@ -196,8 +205,9 @@ class GameView(context: Context): SurfaceView(context), Runnable, GestureDetecto
             canvas?.let {
                 //color background
                 it.drawColor(ContextCompat.getColor(context, R.color.gameBackground))
-                map?.getSnakeBody()?.forEach { canvas?.drawCircle(it.centerX, it.centerY, it.radius, paintSnake) }
                 map?.getFood()?.let { canvas?.drawCircle(it.centerX, it.centerY, it.radius,paintFood) }
+                map?.getSnakeBody()?.forEach { canvas?.drawCircle(it.centerX, it.centerY, it.radius, paintSnake) }
+
             }
 
             holder.unlockCanvasAndPost(canvas)
