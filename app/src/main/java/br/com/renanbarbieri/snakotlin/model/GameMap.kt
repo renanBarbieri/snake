@@ -37,6 +37,9 @@ class GameMap(width: Int, height: Int) {
         generateFoodPosition()
     }
 
+    /**
+     * Defines the position of snake head
+     */
     private fun putSnakeOnCenter() {
         // init snake on center
         snakeX[0] = numOfBlocksWidth/2
@@ -80,15 +83,22 @@ class GameMap(width: Int, height: Int) {
     fun snakeAteFood(): Boolean = (hasSnakeAtPosition(x = foodX, y = foodY))
 
     /**
-     *
+     * Deal with snake food
      */
     fun feedSnake() {
         snake.growUp(getFoodValue())
         generateFoodPosition()
     }
 
+    /**
+     * Get de food value
+     */
     fun getFoodValue() = food.point
 
+    /**
+     * Update de snake body on map
+     * @param direction: the direction of snake head
+     */
     fun updateSnakePosition(direction: Direction){
         // update the snake body
         if(snake.length > 1) {
@@ -111,6 +121,7 @@ class GameMap(width: Int, height: Int) {
 
     /**
      * Retrieves the snake body position at map
+     * @return {ArrayList<CanvasCircle>} list of snake body
      */
     fun getSnakeBody(): ArrayList<CanvasCircle> {
         val canvasArray: ArrayList<CanvasCircle> = arrayListOf()
@@ -156,7 +167,7 @@ class GameMap(width: Int, height: Int) {
      * Verifies if the head of snake is out of map
      */
     private fun hasWallCollision(): Boolean =
-        snakeX[0] == -1 || snakeY[0] == -1 || snakeX[0] >= blocksX || snakeY[0] >= blocksY
+        snakeX[0] == -1 || snakeY[0] == -1 || snakeX[0] >= numOfBlocksWidth || snakeY[0] >= numOfBlocksHeight
 
 
     /**
