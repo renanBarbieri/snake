@@ -1,4 +1,4 @@
-package br.com.renanbarbieri.snakotlin.model
+package br.com.renanbarbieri.snakotlin.engine.model
 
 class GameContext {
 

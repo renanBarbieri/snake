@@ -1,18 +1,27 @@
-package br.com.renanbarbieri.snakotlin
+package br.com.renanbarbieri.snakotlin.framework.gestureDirection
 
 import android.view.GestureDetector
 import android.view.MotionEvent
+import br.com.renanbarbieri.snakotlin.engine.GameGestureDirectionInteractor
 
-class GestureDetectorListener(): GestureDetector.SimpleOnGestureListener() {
+/**
+ * Class for handle user interaction
+ */
+class GestureDetectorFramework(): GestureDetector.SimpleOnGestureListener(), GameGestureDirectionInteractor.Input {
 
-    private var gestureDirectionListener: GestureDirectionListener? = null
+    private var gameGestureDirectionListener: GameGestureDirectionInteractor.Output? = null
     private var minSwipe: Int? = null
     private var maxSwipe: Int? = null
 
-    constructor(minSwipe: Int, maxSwipe: Int?, directionListener: GestureDirectionListener): this(){
+    constructor(minSwipe: Int, maxSwipe: Int?): this(){
         this.minSwipe = minSwipe
         this.maxSwipe = maxSwipe
-        this.gestureDirectionListener = directionListener
+    }
+
+    override fun detectMovement(event: MotionEvent, detector: GestureDetector,
+                                interactorOutput: GameGestureDirectionInteractor.Output) {
+        this.gameGestureDirectionListener = interactorOutput
+        detector.onTouchEvent(event)
     }
 
     override fun onFling(startEvent: MotionEvent?, currentEvent: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
@@ -24,16 +33,16 @@ class GestureDetectorListener(): GestureDetector.SimpleOnGestureListener() {
 
             this.minSwipe?.let {
                 if(startEvent.x - currentEvent.x > it) {
-                    gestureDirectionListener?.onSwipeLeft()
+                    gameGestureDirectionListener?.onSwipeLeft()
                 }
                 if (currentEvent.x - startEvent.x > it) {
-                    gestureDirectionListener?.onSwipeRight()
+                    gameGestureDirectionListener?.onSwipeRight()
                 }
                 if(startEvent.y - currentEvent.y > it) {
-                    gestureDirectionListener?.onSwipeUp()
+                    gameGestureDirectionListener?.onSwipeUp()
                 }
                 if (currentEvent.y - startEvent.y > it) {
-                    gestureDirectionListener?.onSwipeDown()
+                    gameGestureDirectionListener?.onSwipeDown()
                 }
             }
         }
@@ -43,24 +52,5 @@ class GestureDetectorListener(): GestureDetector.SimpleOnGestureListener() {
 
     override fun onDown(e: MotionEvent?): Boolean {
         return true
-    }
-
-    interface GestureDirectionListener {
-        /**
-         * Called when user swipe to left
-         */
-        fun onSwipeLeft()
-        /**
-         * Called when user swipe to right
-         */
-        fun onSwipeRight()
-        /**
-         * Called when user swipe to top
-         */
-        fun onSwipeUp()
-        /**
-         * Called when user swipe to bottom
-         */
-        fun onSwipeDown()
     }
 }

@@ -1,6 +1,5 @@
-package br.com.renanbarbieri.snakotlin.model
+package br.com.renanbarbieri.snakotlin.engine.model
 
-import br.com.renanbarbieri.snakotlin.Direction
 import br.com.renanbarbieri.snakotlin.random
 
 /**
@@ -132,9 +131,9 @@ class GameMap(width: Int, height: Int) {
             val startYRect: Float = (snakeY[i] * blocksY).toFloat()
             val endYRect: Float = ((snakeY[i] * blocksY) + blocksY).toFloat()
             canvasArray.add(CanvasCircle(
-                    centerX = (startXRect + endXRect)/2,
-                    centerY = (startYRect + endYRect)/2,
-                    radius = (blocksX/2).toFloat()
+                    centerX = (startXRect + endXRect) / 2,
+                    centerY = (startYRect + endYRect) / 2,
+                    radius = (blocksX / 2).toFloat()
             ))
         }
         return canvasArray
@@ -151,9 +150,9 @@ class GameMap(width: Int, height: Int) {
         val endYRect: Float = ((foodY * blocksY) + blocksY).toFloat()
 
         return CanvasCircle(
-                centerX = (startXRect + endXRect)/2,
-                centerY = (startYRect + endYRect)/2,
-                radius = (blocksX/2).toFloat()
+                centerX = (startXRect + endXRect) / 2,
+                centerY = (startYRect + endYRect) / 2,
+                radius = (blocksX / 2).toFloat()
 
         )
     }
