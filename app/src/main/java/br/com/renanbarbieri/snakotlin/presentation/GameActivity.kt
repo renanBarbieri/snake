@@ -1,11 +1,11 @@
-package br.com.renanbarbieri.snakotlin
+package br.com.renanbarbieri.snakotlin.presentation
 
 import android.graphics.Point
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import br.com.renanbarbieri.snakotlin.engine.GameEngine
-import br.com.renanbarbieri.snakotlin.framework.gestureDirection.GestureDetectorFramework
-import br.com.renanbarbieri.snakotlin.framework.screenDrawer.ScreenDrawerFramework
+import br.com.renanbarbieri.snakotlin.presentation.engine.GameEngine
+import br.com.renanbarbieri.snakotlin.presentation.framework.gestureDirection.GestureDetectorFramework
+import br.com.renanbarbieri.snakotlin.presentation.framework.screenDrawer.ScreenDrawerFramework
 
 class GameActivity : AppCompatActivity(), GameLifecycle {
 

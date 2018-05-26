@@ -1,8 +1,9 @@
-package br.com.renanbarbieri.snakotlin
+package br.com.renanbarbieri.snakotlin.presentation
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import br.com.renanbarbieri.snakotlin.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
