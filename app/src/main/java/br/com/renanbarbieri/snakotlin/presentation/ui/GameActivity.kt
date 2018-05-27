@@ -24,6 +24,9 @@ class GameActivity : AppCompatActivity(), GameLifecycle {
 
         enum class Level { EASY, NORMAL, HARD }
 
+        /**
+         * Static method for start this activity with necessary parameters
+         */
         fun start(level: Level, callerActivity: AppCompatActivity){
             val intent = Intent(callerActivity, GameActivity::class.java)
             val args = Bundle()
@@ -65,6 +68,9 @@ class GameActivity : AppCompatActivity(), GameLifecycle {
         setContentView(gameEngine)
     }
 
+    /**
+     * Initialize the frameworks
+     */
     private fun initFramework(screenX:Int) {
         this.gestureInteractor = GestureDetectorFramework(
                 minSwipe = screenX/5,
@@ -83,6 +89,10 @@ class GameActivity : AppCompatActivity(), GameLifecycle {
         gameEngine?.pause()
     }
 
+    /**
+     * When snake is dead, this method is called.
+     * - Save the score
+     */
     override fun onSnakeDead(score: Int) {
         viewModel?.saveScore(score)
     }

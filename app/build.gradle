@@ -31,10 +31,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
-    //DI
-//    implementation "com.google.dagger:dagger:2.12"
-//    kapt "com.google.dagger:dagger-compiler:2.12"
-
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     kapt "android.arch.lifecycle:compiler:$lifecycle_version"

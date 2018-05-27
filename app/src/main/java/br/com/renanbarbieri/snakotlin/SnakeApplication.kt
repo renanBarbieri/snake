@@ -7,6 +7,7 @@ class SnakeApplication: Application(){
 
     override fun onCreate() {
         super.onCreate()
+        //initialize the repository
         ScoreRepository.initRepository(this)
     }
 }

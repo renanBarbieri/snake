@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             GameActivity.start(level, this)
         })
 
+        // set listener for define the level
         btLevel.setOnClickListener {
             clickCount++
             when(clickCount.rem(3)){

@@ -59,6 +59,9 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
         this.initInteractors(drawerInteractor, gameGestureInteractor)
     }
 
+    /**
+     * Initialize all insteractor necessary for game
+     */
     private fun initInteractors(
             drawerInteractor: GameScreenDrawerInteractor.Input?,
             gameGestureInteractor: GameGestureDirectionInteractor.Input?) {
@@ -77,6 +80,9 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
         resume()
     }
 
+    /**
+     * Starts the game thread loop
+     */
     override fun run() {
         //Execute game
         while(this.gameContext.isRunning){
@@ -87,6 +93,9 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
         }
     }
 
+    /**
+     * Pause the game
+     */
     fun pause() {
         try {
             this.gameContext.isRunning = false
@@ -97,13 +106,19 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
 
     }
 
+    /**
+     * Start the game
+     */
     fun resume() {
         this.gameContext.isRunning = true
         this.gameThread = Thread(this)
         this.gameThread?.start()
     }
 
-    fun finish() {
+    /**
+     * Finish game and kill the snake
+     */
+    private fun finish() {
         this.gameContext.isRunning = false
         this.gameLifecycle?.onSnakeDead(this.gameContext.score)
     }
@@ -224,6 +239,9 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
         }
     }
 
+    /**
+     * Request the interactor to draw the current frame
+     */
     private fun drawFrame() {
         if(this.holder.surface.isValid) {
             this.map?.let {
