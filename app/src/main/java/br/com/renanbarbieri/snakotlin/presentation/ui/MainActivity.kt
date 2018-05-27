@@ -14,14 +14,29 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private var viewModel: GetUserTopScoreViewModel? = null
+    private var clickCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         btStart.setOnClickListener({
-            startActivity(Intent(this, GameActivity::class.java))
+            val level: GameActivity.Companion.Level = when(clickCount.rem(3)){
+                0 -> GameActivity.Companion.Level.NORMAL
+                1 -> GameActivity.Companion.Level.HARD
+                else -> GameActivity.Companion.Level.EASY
+            }
+            GameActivity.start(level, this)
         })
+
+        btLevel.setOnClickListener {
+            clickCount++
+            when(clickCount.rem(3)){
+                0 -> btLevel.setText(R.string.normal)
+                1 -> btLevel.setText(R.string.hard)
+                else -> btLevel.setText(R.string.easy)
+            }
+        }
 
         viewModel = ViewModelProviders.of(this).get(GetUserTopScoreViewModel::class.java)
     }

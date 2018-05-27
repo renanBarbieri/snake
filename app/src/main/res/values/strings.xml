@@ -2,4 +2,9 @@
     <string name="app_name">Snakotlin</string>
 
     <string name="errorWhenPausing">Desculpe, mas ocorreu um erro ao salvar seu jogo</string>
+    <string name="record">Recorde</string>
+    <string name="start">Iniciar</string>
+    <string name="easy">Fácil</string>
+    <string name="normal">Normal</string>
+    <string name="hard">Difícil</string>
 </resources>

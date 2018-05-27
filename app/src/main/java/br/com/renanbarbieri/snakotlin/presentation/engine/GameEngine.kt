@@ -31,7 +31,7 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
     // Time for verify update
     private var nextUpdateTime: Long = nowTime
 
-    private val fps: Long = 6
+    private var fps: Long = 6
     private var screenDimen: Point? = null
 
     private var currentDirection: Direction = Direction.UP
@@ -48,13 +48,14 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
     }
 
 
-    constructor(context: Context, screenDimen: Point,
+    constructor(context: Context, fps: Long, screenDimen: Point,
                 drawerInteractor: GameScreenDrawerInteractor.Input?,
                 gameGestureInteractor: GameGestureDirectionInteractor.Input?,
                 gameLifecycle: GameLifecycle): this(context) {
         this.map = GameMap(width = screenDimen.x, height = screenDimen.y)
         this.screenDimen = screenDimen
         this.gameLifecycle = gameLifecycle
+        this.fps = fps
         this.initInteractors(drawerInteractor, gameGestureInteractor)
     }
 
