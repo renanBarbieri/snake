@@ -10,7 +10,7 @@ class GameMap(width: Int, height: Int) {
     //Constants to set map
     private val numOfBlocksWidth: Int = 20
     private val numOfBlocksHeight: Int = 30
-    private val maxShotRandomFood: Int = 100
+    private val maxShotRandomFood: Int = numOfBlocksWidth * numOfBlocksHeight
 
     /**
      * Quantity of blocks available on each axis
@@ -60,6 +60,7 @@ class GameMap(width: Int, height: Int) {
             }
             else {
                 //to avoid infinity loop
+                //TODO: Fim de jogo
             }
         }
 

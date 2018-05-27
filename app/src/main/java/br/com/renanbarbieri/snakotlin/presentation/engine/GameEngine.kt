@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceView
-import br.com.renanbarbieri.snakotlin.presentation.GameLifecycle
 import br.com.renanbarbieri.snakotlin.presentation.engine.model.Direction
 import br.com.renanbarbieri.snakotlin.R
 import br.com.renanbarbieri.snakotlin.presentation.engine.model.GameContext
