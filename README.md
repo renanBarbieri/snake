@@ -2,9 +2,9 @@
 Releitura do jogo clássico Snake
 
 ### Dados técnicos
-**Linguagem:** Kotlin
-**Arquitetura:** Baseada nos conceitos de Clean Architecture e utilização do Android Architecture Components
-**Testes:** Ainda não implementado.
+**Linguagem:** Kotlin   
+**Arquitetura:** Baseada nos conceitos de Clean Architecture e utilização do Android Architecture Components   
+**Testes:** Ainda não implementado.   
 
 ### Dados de Desenvolvimento   
 **Data de Início:** 21/05/2018   
