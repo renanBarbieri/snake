@@ -18,8 +18,8 @@ class GameMap(width: Int, height: Int) {
     private var blocksX: Int = 0
     private var blocksY: Int = 0
 
-    private var snakeX: IntArray = IntArray(numOfBlocksWidth)
-    private var snakeY: IntArray = IntArray(numOfBlocksHeight)
+    private lateinit var snakeX: IntArray
+    private lateinit var snakeY: IntArray
 
     private var foodX: Int = 0
     private var foodY: Int = 0
@@ -31,6 +31,9 @@ class GameMap(width: Int, height: Int) {
         // defines number of blocks
         this.blocksX = width/numOfBlocksWidth
         this.blocksY = height/numOfBlocksHeight
+
+        snakeX = IntArray(blocksX)
+        snakeY = IntArray(blocksY)
 
         putSnakeOnCenter()
         generateFoodPosition()

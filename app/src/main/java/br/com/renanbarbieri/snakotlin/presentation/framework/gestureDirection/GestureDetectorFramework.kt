@@ -34,15 +34,19 @@ class GestureDetectorFramework(): GestureDetector.SimpleOnGestureListener(), Gam
             this.minSwipe?.let {
                 if(startEvent.x - currentEvent.x > it) {
                     gameGestureDirectionListener?.onSwipeLeft()
+                    return true
                 }
                 if (currentEvent.x - startEvent.x > it) {
                     gameGestureDirectionListener?.onSwipeRight()
+                    return true
                 }
                 if(startEvent.y - currentEvent.y > it) {
                     gameGestureDirectionListener?.onSwipeUp()
+                    return true
                 }
                 if (currentEvent.y - startEvent.y > it) {
                     gameGestureDirectionListener?.onSwipeDown()
+                    return true
                 }
             }
         }
