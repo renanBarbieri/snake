@@ -18,8 +18,8 @@ class GameMap(width: Int, height: Int) {
     private var blocksX: Int = 0
     private var blocksY: Int = 0
 
-    private lateinit var snakeX: IntArray
-    private lateinit var snakeY: IntArray
+    private var snakeX: IntArray
+    private var snakeY: IntArray
 
     private var foodX: Int = 0
     private var foodY: Int = 0
@@ -83,7 +83,11 @@ class GameMap(width: Int, height: Int) {
      * Verifies is the snake is above food position
      * @return boolean : true if the snake is above food position
      */
-    fun snakeAteFood(): Boolean = (hasSnakeAtPosition(x = foodX, y = foodY))
+    fun snakeAteFood(): Boolean = (
+            hasSnakeAtPosition(x = foodX, y = foodY) &&
+                    snakeX[0] == foodX &&
+                    snakeY[0] == foodY
+            )
 
     /**
      * Deal with snake food
