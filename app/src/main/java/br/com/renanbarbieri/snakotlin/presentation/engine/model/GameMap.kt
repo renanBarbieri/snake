@@ -1,5 +1,6 @@
 package br.com.renanbarbieri.snakotlin.presentation.engine.model
 
+import android.util.Log
 import br.com.renanbarbieri.snakotlin.random
 
 /**
@@ -30,10 +31,11 @@ class GameMap(width: Int, height: Int) {
     init{
         // defines number of blocks
         this.blocksX = width/numOfBlocksWidth
-        this.blocksY = height/numOfBlocksHeight
+        this.blocksY = (height/numOfBlocksHeight)-1 //troubleshoot for last lina
 
-        snakeX = IntArray(blocksX)
-        snakeY = IntArray(blocksY)
+        //the snake can occupy all map
+        snakeX = IntArray(blocksX*blocksY)
+        snakeY = IntArray(blocksX*blocksY)
 
         putSnakeOnCenter()
         generateFoodPosition()
@@ -84,7 +86,6 @@ class GameMap(width: Int, height: Int) {
      * @return boolean : true if the snake is above food position
      */
     fun snakeAteFood(): Boolean = (
-            hasSnakeAtPosition(x = foodX, y = foodY) &&
                     snakeX[0] == foodX &&
                     snakeY[0] == foodY
             )
@@ -108,21 +109,25 @@ class GameMap(width: Int, height: Int) {
      */
     fun updateSnakePosition(direction: Direction){
         // update the snake body
-        if(snake.length > 1) {
-            for (i in (snake.length-1) downTo 1) {
-                //update position from end to start
-                snakeX[i] = snakeX[i - 1]
-                snakeY[i] = snakeY[i - 1]
+        try {
+            if (snake.length > 1) {
+                for (i in (snake.length - 1) downTo 1) {
+                    //update position from end to start
+                    snakeX[i] = snakeX[i - 1]
+                    snakeY[i] = snakeY[i - 1]
 
+                }
             }
-        }
 
-        // update the snake head position
-        when(direction) {
-            Direction.LEFT -> snakeX[0]--
-            Direction.RIGHT -> snakeX[0]++
-            Direction.UP -> snakeY[0]--
-            Direction.DOWN -> snakeY[0]++
+            // update the snake head position
+            when (direction) {
+                Direction.LEFT -> snakeX[0]--
+                Direction.RIGHT -> snakeX[0]++
+                Direction.UP -> snakeY[0]--
+                Direction.DOWN -> snakeY[0]++
+            }
+        } catch (iob: IndexOutOfBoundsException){
+            Log.e("IOB", "snake size: ${snakeX.size}; ${snakeY.size}")
         }
     }
 

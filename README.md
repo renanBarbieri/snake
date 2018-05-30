@@ -13,6 +13,6 @@ Releitura do jogo clássico Snake
 
 ### Bugs Conhecidos
 Com o objetivo de querer implementar uma estrutura do jogo mais completa, alguns erros não foram solucionados ainda:   
-* Na parte inferior, o Mapa está um pouco maior que a tela   
+* [RESOLVIDO - 29/05] Na parte inferior, o Mapa está um pouco maior que a tela
 * [RESOLVIDO - 29/05] As vezes a cobra é alimentada mesmo sem ter passado pela comida (erro crítico)
 * [RESOLVIDO - 29/05] As vezes é possível inverter a direção da cobra (o correto é poder apenas direcionar para os lados da cobra)
