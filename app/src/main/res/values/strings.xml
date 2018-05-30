@@ -7,4 +7,16 @@
     <string name="easy">Fácil</string>
     <string name="normal">Normal</string>
     <string name="hard">Difícil</string>
+
+    <string name="dialogTitleSuccess">Oba!</string>
+    <string name="dialogTitleFail">Ah não!</string>
+    <string name="dialogTitleError">Ops!</string>
+
+    <string name="snakeIsDead">Você acabou de matar a cobra!</string>
+    <string name="snakeIsTooBig">Você conseguiu zerar o jogo!</string>
+
+    <string name="tryAgain">Tentar de novo</string>
+    <string name="success">UHUUL!</string>
+    <string name="goBack">Voltar</string>
+    <string name="ok">Ok</string>
 </resources>

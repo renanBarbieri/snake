@@ -1,6 +1,8 @@
 package br.com.renanbarbieri.snakotlin.presentation.engine.model
 
 import android.util.Log
+import br.com.renanbarbieri.snakotlin.presentation.engine.EndGameException
+import br.com.renanbarbieri.snakotlin.presentation.engine.UnexpectedGameBehaviorException
 import br.com.renanbarbieri.snakotlin.random
 
 /**
@@ -64,8 +66,7 @@ class GameMap(width: Int, height: Int) {
                 return
             }
             else {
-                //to avoid infinity loop
-                //TODO: Fim de jogo
+                throw EndGameException()
             }
         }
 
@@ -126,8 +127,9 @@ class GameMap(width: Int, height: Int) {
                 Direction.UP -> snakeY[0]--
                 Direction.DOWN -> snakeY[0]++
             }
-        } catch (iob: IndexOutOfBoundsException){
+        } catch (iob: Exception){
             Log.e("IOB", "snake size: ${snakeX.size}; ${snakeY.size}")
+            throw UnexpectedGameBehaviorException(iob.message)
         }
     }
 

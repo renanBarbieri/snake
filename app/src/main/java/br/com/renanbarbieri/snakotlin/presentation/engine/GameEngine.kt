@@ -73,7 +73,7 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
     /**
      * Restarts the game
      */
-    private fun restartGame() {
+    fun restartGame() {
         this.map?.clear()
         this.currentDirection = Direction.UP
         this.gameContext.score = 0
@@ -142,15 +142,23 @@ class GameEngine(context: Context): SurfaceView(context), Runnable, GameGestureD
      */
     private fun updateGameContext() {
         this.map?.let {
-            if(it.snakeAteFood()){
-                //snake should eat food
-                this.gameContext.updateScore(addValue = it.getFoodValue())
-                it.feedSnake()
-            }
-            it.updateSnakePosition(currentDirection)
+            try {
+                if(it.snakeAteFood()){
+                    //snake should eat food
+                    this.gameContext.updateScore(addValue = it.getFoodValue())
+                    it.feedSnake()
+                }
 
-            if(it.hasCollision()) {
-                finish()
+                it.updateSnakePosition(currentDirection)
+
+                if(it.hasCollision()) {
+                    finish()
+                }
+                return
+            } catch (e: EndGameException){
+                gameLifecycle?.onGameFinished()
+            } catch (ugb: UnexpectedGameBehaviorException){
+                gameLifecycle?.onError("Ocorreu um erro inesperado")
             }
         }
 

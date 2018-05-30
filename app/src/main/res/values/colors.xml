@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimaryDark">#b13333</color>
     <color name="colorPrimary">#fe4a49</color>
-    <color name="colorAccent">#fed766</color>
+    <color name="colorAccent">#2ab7ca</color>
 
     <color name="gameBackground">#f4f4f8</color>
     <color name="snake">#fe4a49</color>

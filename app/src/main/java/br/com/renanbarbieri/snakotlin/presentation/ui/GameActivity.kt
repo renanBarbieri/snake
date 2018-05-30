@@ -4,7 +4,9 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import br.com.renanbarbieri.snakotlin.R
 import br.com.renanbarbieri.snakotlin.domain.saveUserScore.SaveUserScoreViewModel
 import br.com.renanbarbieri.snakotlin.presentation.engine.GameLifecycle
 import br.com.renanbarbieri.snakotlin.presentation.engine.GameEngine
@@ -95,9 +97,52 @@ class GameActivity : AppCompatActivity(), GameLifecycle {
      */
     override fun onSnakeDead(score: Int) {
         viewModel?.saveScore(score)
+        runOnUiThread({this.showTryAgain()})
+    }
+
+    override fun onGameFinished() {
+        runOnUiThread({this.showGameFinished()})
     }
 
     override fun onError(errorMessage: String) {
-        //TODO: exibir alerta de erro
+        runOnUiThread({this.showErrorAlert(errorMessage)})
+    }
+
+
+    private fun showTryAgain(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.dialogTitleFail)
+        builder.setMessage(R.string.snakeIsDead)
+        builder.setPositiveButton(R.string.tryAgain){dialog, which ->
+            gameEngine?.restartGame()
+        }
+        builder.setNeutralButton(R.string.goBack){dialog, which ->
+            this.onBackPressed()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    private fun showGameFinished() {
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle(R.string.dialogTitleSuccess)
+        builder.setMessage(R.string.snakeIsTooBig)
+        builder.setPositiveButton(R.string.success){dialog, which ->
+            this.onBackPressed()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    private fun showErrorAlert(message: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.dialogTitleError)
+        builder.setMessage(message)
+        builder.setPositiveButton(R.string.ok){dialog, which ->
+            this.onBackPressed()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 }
