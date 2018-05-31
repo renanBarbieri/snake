@@ -21,8 +21,8 @@ class GameMap(width: Int, height: Int) {
     private var blocksX: Int = 0
     private var blocksY: Int = 0
 
-    private var snakeX: IntArray
-    private var snakeY: IntArray
+    private lateinit var snakeX: IntArray
+    private lateinit var snakeY: IntArray
 
     private var foodX: Int = 0
     private var foodY: Int = 0
@@ -35,12 +35,15 @@ class GameMap(width: Int, height: Int) {
         this.blocksX = width/numOfBlocksWidth
         this.blocksY = (height/numOfBlocksHeight)-1 //troubleshoot for last lina
 
+        initSnakePossiblePositions()
+        putSnakeOnCenter()
+        generateFoodPosition()
+    }
+
+    private fun initSnakePossiblePositions(){
         //the snake can occupy all map
         snakeX = IntArray(blocksX*blocksY)
         snakeY = IntArray(blocksX*blocksY)
-
-        putSnakeOnCenter()
-        generateFoodPosition()
     }
 
     /**
@@ -199,8 +202,7 @@ class GameMap(width: Int, height: Int) {
 
     fun clear() {
         snake.length = 1
-        snakeX = IntArray(numOfBlocksWidth)
-        snakeY = IntArray(numOfBlocksHeight)
+        initSnakePossiblePositions()
         putSnakeOnCenter()
         generateFoodPosition()
     }
